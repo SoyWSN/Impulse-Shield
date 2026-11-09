@@ -68,6 +68,7 @@ export async function createImpulse(
 /**
  * Escucha en tiempo real si existe un impulso actualmente en estado 'active'.
  * Emite el item activo o null.
+ * (Nota: No usamos orderBy en la consulta compuesta para evitar requerir índices compuestos en Firebase).
  */
 export function subscribeToActiveImpulse(
   callback: (item: ImpulseItem | null) => void,
@@ -75,9 +76,7 @@ export function subscribeToActiveImpulse(
 ): Unsubscribe {
   const q = query(
     collection(db, COLLECTIONS.IMPULSES),
-    where('status', '==', 'active'),
-    orderBy('createdAt', 'desc'),
-    limit(1)
+    where('status', '==', 'active')
   );
 
   return onSnapshot(
@@ -86,7 +85,11 @@ export function subscribeToActiveImpulse(
       if (snapshot.empty) {
         callback(null);
       } else {
-        const docSnap = snapshot.docs[0];
+        // Ordenamos en memoria para obtener el más reciente sin requerir índices compuestos en Firestore
+        const sortedDocs = [...snapshot.docs].sort(
+          (a, b) => (b.data().createdAt || 0) - (a.data().createdAt || 0)
+        );
+        const docSnap = sortedDocs[0];
         const data = docSnap.data();
         callback({
           id: docSnap.id,
