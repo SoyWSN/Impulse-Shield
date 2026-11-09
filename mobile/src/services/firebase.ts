@@ -1,15 +1,14 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 
-// Configuración de Firebase para ImpulseShield
-// Se puede reemplazar con las credenciales de tu proyecto de Firebase Console
+// Configuración reutilizada del proyecto Firebase existente (tiltmaze-726ca)
 const firebaseConfig = {
-  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY || "AIzaSyDemoImpulseShieldKey2026",
-  authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN || "impulse-shield-demo.firebaseapp.com",
-  projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID || "impulse-shield-demo",
-  storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET || "impulse-shield-demo.appspot.com",
-  messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "123456789012",
-  appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID || "1:123456789012:web:abcdef1234567890"
+  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY || "AIzaSyAzIiYgdqQy2WXHGIXB5u93bRXauhe-KTo",
+  authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN || "tiltmaze-726ca.firebaseapp.com",
+  projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID || "tiltmaze-726ca",
+  storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET || "tiltmaze-726ca.firebasestorage.app",
+  messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "721187364574",
+  appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID || "1:721187364574:android:69c7e73238bb2449f4ac4f"
 };
 
 // Inicializar singleton de Firebase

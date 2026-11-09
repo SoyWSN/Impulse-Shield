@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "ImpulseShield",
+    "slug": "impulse-shield",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#020617"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#020617"
+      },
+      "package": "com.impulseshield.app"
+    }
+  }
+}
