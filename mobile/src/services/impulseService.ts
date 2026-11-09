@@ -10,8 +10,8 @@ import {
   limit,
   Unsubscribe
 } from 'firebase/firestore';
-import { db, COLLECTIONS } from './firebase.js';
-import type { ImpulseItem, ImpulseStatus } from '../types/impulse.js';
+import { db, COLLECTIONS } from './firebase';
+import type { ImpulseItem, ImpulseStatus } from '../types/impulse';
 
 export interface ValidationResult {
   valid: boolean;

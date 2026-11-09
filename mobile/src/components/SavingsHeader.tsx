@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { formatCurrency } from '../utils/stats.js';
-import type { UserStats } from '../types/impulse.js';
+import { formatCurrency } from '../utils/stats';
+import type { UserStats } from '../types/impulse';
 
 interface Props {
   stats: UserStats;

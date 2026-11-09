@@ -10,18 +10,18 @@ import {
   RefreshControl,
   Alert,
 } from 'react-native';
-import { SavingsHeader } from '../components/SavingsHeader.js';
-import { ActiveCountdownCard } from '../components/ActiveCountdownCard.js';
-import { CreateImpulseModal } from '../components/CreateImpulseModal.js';
-import { HistoryList } from '../components/HistoryList.js';
+import { SavingsHeader } from '../components/SavingsHeader';
+import { ActiveCountdownCard } from '../components/ActiveCountdownCard';
+import { CreateImpulseModal } from '../components/CreateImpulseModal';
+import { HistoryList } from '../components/HistoryList';
 import {
   subscribeToActiveImpulse,
   subscribeToAllImpulses,
   createImpulse,
   resolveImpulse,
-} from '../services/impulseService.js';
-import { calculateUserStats } from '../utils/stats.js';
-import type { ImpulseItem, UserStats } from '../types/impulse.js';
+} from '../services/impulseService';
+import { calculateUserStats } from '../utils/stats';
+import type { ImpulseItem, UserStats } from '../types/impulse';
 
 export const HomeScreen: React.FC = () => {
   const [activeImpulse, setActiveImpulse] = useState<ImpulseItem | null>(null);

@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
-import { validateImpulseInput } from '../impulseService.js';
+import { describe, it, expect } from 'vitest';
+import { validateImpulseInput } from '../impulseService';
 
 describe('validateImpulseInput', () => {
   it('accepts valid input', () => {

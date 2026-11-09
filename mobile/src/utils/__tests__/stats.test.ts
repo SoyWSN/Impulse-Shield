@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { calculateUserStats } from '../stats.js';
-import type { ImpulseItem } from '../../types/impulse.js';
+import { calculateUserStats } from '../stats';
+import type { ImpulseItem } from '../../types/impulse';
 
 describe('calculateUserStats', () => {
   it('calculates total saved, total spent and counts correctly', () => {

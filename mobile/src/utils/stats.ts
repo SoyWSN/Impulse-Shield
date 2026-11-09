@@ -1,4 +1,4 @@
-import type { ImpulseItem, UserStats } from '../types/impulse.js';
+import type { ImpulseItem, UserStats } from '../types/impulse';
 
 export function calculateUserStats(items: ImpulseItem[]): UserStats {
   return items.reduce(
