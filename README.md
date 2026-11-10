@@ -1,4 +1,4 @@
-# 🛡️ ImpulseShield (Examen Aurelio 2)
+# 🛡️ ImpulseShield
 
 **ImpulseShield** es una solución integral diseñada para la materia de *Desarrollo de Dispositivos Inteligentes*. Resuelve un problema cotidiano y económico real: **las compras impulsivas y los gastos emocionales**, interponiendo un período de enfriamiento voluntario entre el deseo y la acción de compra mediante un centinela físico en la muñeca (smartwatch con Wear OS).
 
@@ -66,7 +66,7 @@ Este comando automatiza todo el proceso:
 
 ---
 
-## 🧪 Demostración del Flujo para el Examen (Prueba de 1 minuto)
+## 🧪 Demostración del Flujo (Prueba de 1 minuto)
 
 1. En la app móvil, pulsa **"+ Frenar Impulso"**.
 2. Escribe:
