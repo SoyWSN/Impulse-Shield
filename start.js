@@ -35,7 +35,7 @@ async function launchWearOS() {
   if (!isEmulatorReady()) {
     console.log('⌚ [Reloj] Iniciando emulador Wear OS (WearOS7)...');
     try {
-      const emu = spawn('emulator', ['-avd', 'WearOS7'], {
+      const emu = spawn('emulator', ['-avd', 'WearOS7', '-no-snapshot-load'], {
         detached: true,
         stdio: 'ignore',
         shell: true,
