@@ -9,9 +9,11 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 
 interface Props {
   visible: boolean;
@@ -20,7 +22,7 @@ interface Props {
 }
 
 const PRESET_DURATIONS = [
-  { label: '⚡ 1 min (Demo)', seconds: 60 },
+  { label: '1 min (Prueba)', seconds: 60 },
   { label: '5 min', seconds: 300 },
   { label: '15 min', seconds: 900 },
   { label: '30 min', seconds: 1800 },
@@ -29,9 +31,13 @@ const PRESET_DURATIONS = [
 export const CreateImpulseModal: React.FC<Props> = ({ visible, onClose, onSubmit }) => {
   const [productName, setProductName] = useState('');
   const [price, setPrice] = useState('');
-  const [selectedDuration, setSelectedDuration] = useState<number>(60); // Default a demo de 1 min
+  const [selectedDuration, setSelectedDuration] = useState<number>(60);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Estados de foco para bordes activos
+  const [productFocused, setProductFocused] = useState(false);
+  const [priceFocused, setPriceFocused] = useState(false);
 
   const resetForm = () => {
     setProductName('');
@@ -70,86 +76,122 @@ export const CreateImpulseModal: React.FC<Props> = ({ visible, onClose, onSubmit
 
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={handleClose}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.overlay}>
-          <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-            style={styles.modalContent}
-          >
+      <View style={styles.overlay}>
+        <TouchableWithoutFeedback onPress={handleClose}>
+          <View style={styles.backdrop} />
+        </TouchableWithoutFeedback>
+
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={styles.keyboardContainer}
+        >
+          <View style={styles.modalContent}>
+            {/* Handle bar */}
             <View style={styles.handle} />
-            <Text style={styles.title}>🛡️ Frenar compra por impulso</Text>
-            <Text style={styles.subtitle}>
-              Establece un tiempo de enfriamiento antes de decidir si comprarlo.
-            </Text>
 
-            {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
-
-            <Text style={styles.inputLabel}>¿Qué artículo viste?</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Ej. Audífonos Bluetooth, Tenis..."
-              placeholderTextColor="#64748b"
-              value={productName}
-              onChangeText={setProductName}
-            />
-
-            <Text style={styles.inputLabel}>Precio aproximado (\$ MXN)</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Ej. 1500"
-              placeholderTextColor="#64748b"
-              keyboardType="numeric"
-              value={price}
-              onChangeText={setPrice}
-            />
-
-            <Text style={styles.inputLabel}>Tiempo de enfriamiento</Text>
-            <View style={styles.durationsGrid}>
-              {PRESET_DURATIONS.map((preset) => {
-                const isSelected = selectedDuration === preset.seconds;
-                return (
-                  <TouchableOpacity
-                    key={preset.seconds}
-                    style={[styles.durationChip, isSelected && styles.durationChipSelected]}
-                    onPress={() => setSelectedDuration(preset.seconds)}
-                    activeOpacity={0.7}
-                  >
-                    <Text
-                      style={[
-                        styles.durationChipText,
-                        isSelected && styles.durationChipTextSelected,
-                      ]}
-                    >
-                      {preset.label}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
+            {/* Header */}
+            <View style={styles.headerRow}>
+              <View>
+                <Text style={styles.title}>Frenar impulso</Text>
+                <Text style={styles.subtitle}>
+                  Activa un tiempo de enfriamiento antes de comprar.
+                </Text>
+              </View>
+              <TouchableOpacity
+                onPress={handleClose}
+                style={styles.closeButton}
+                hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+              >
+                <Feather name="x" size={18} color="#94a3b8" />
+              </TouchableOpacity>
             </View>
 
-            <TouchableOpacity
-              style={styles.submitBtn}
-              onPress={handleCreate}
-              disabled={loading}
-              activeOpacity={0.8}
-            >
-              {loading ? (
-                <ActivityIndicator color="#ffffff" />
-              ) : (
-                <Text style={styles.submitBtnText}>Iniciar Enfriamiento</Text>
-              )}
-            </TouchableOpacity>
+            {errorMessage && (
+              <View style={styles.errorBox}>
+                <Feather name="alert-circle" size={14} color="#ef4444" style={{ marginRight: 6 }} />
+                <Text style={styles.errorText}>{errorMessage}</Text>
+              </View>
+            )}
 
-            <TouchableOpacity
-              style={styles.cancelLink}
-              onPress={handleClose}
-              disabled={loading}
+            {/* Scrollable form so keyboard never covers fields */}
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+              contentContainerStyle={styles.scrollForm}
             >
-              <Text style={styles.cancelLinkText}>Cancelar</Text>
-            </TouchableOpacity>
-          </KeyboardAvoidingView>
-        </View>
-      </TouchableWithoutFeedback>
+              <Text style={styles.inputLabel}>ARTÍCULO O PRODUCTO</Text>
+              <View style={[styles.inputWrapper, productFocused && styles.inputWrapperFocused]}>
+                <Feather name="tag" size={16} color={productFocused ? '#10b981' : '#64748b'} style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Ej. Audífonos Bluetooth, Tenis..."
+                  placeholderTextColor="#475569"
+                  value={productName}
+                  onChangeText={setProductName}
+                  onFocus={() => setProductFocused(true)}
+                  onBlur={() => setProductFocused(false)}
+                  returnKeyType="next"
+                />
+              </View>
+
+              <Text style={styles.inputLabel}>PRECIO APROXIMADO (MXN)</Text>
+              <View style={[styles.inputWrapper, priceFocused && styles.inputWrapperFocused]}>
+                <Text style={[styles.currencyPrefix, priceFocused && styles.currencyPrefixFocused]}>$</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="0.00"
+                  placeholderTextColor="#475569"
+                  keyboardType="numeric"
+                  value={price}
+                  onChangeText={setPrice}
+                  onFocus={() => setPriceFocused(true)}
+                  onBlur={() => setPriceFocused(false)}
+                />
+              </View>
+
+              <Text style={styles.inputLabel}>TIEMPO DE ESPERA (RELOJ)</Text>
+              <View style={styles.durationsGrid}>
+                {PRESET_DURATIONS.map((preset) => {
+                  const isSelected = selectedDuration === preset.seconds;
+                  return (
+                    <TouchableOpacity
+                      key={preset.seconds}
+                      style={[styles.durationChip, isSelected && styles.durationChipSelected]}
+                      onPress={() => setSelectedDuration(preset.seconds)}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={[
+                          styles.durationChipText,
+                          isSelected && styles.durationChipTextSelected,
+                        ]}
+                      >
+                        {preset.label}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+
+              <TouchableOpacity
+                style={styles.submitBtn}
+                onPress={handleCreate}
+                disabled={loading}
+                activeOpacity={0.8}
+              >
+                {loading ? (
+                  <ActivityIndicator color="#ffffff" />
+                ) : (
+                  <View style={styles.submitContent}>
+                    <Feather name="shield" size={16} color="#ffffff" style={{ marginRight: 8 }} />
+                    <Text style={styles.submitBtnText}>Iniciar Enfriamiento</Text>
+                  </View>
+                )}
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
+        </KeyboardAvoidingView>
+      </View>
     </Modal>
   );
 };
@@ -157,110 +199,174 @@ export const CreateImpulseModal: React.FC<Props> = ({ visible, onClose, onSubmit
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
     justifyContent: 'flex-end',
+    backgroundColor: 'rgba(2, 6, 23, 0.75)',
+  },
+  backdrop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  keyboardContainer: {
+    width: '100%',
+    maxHeight: '90%',
   },
   modalContent: {
-    backgroundColor: '#0f172a',
+    backgroundColor: '#0c0f17',
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
-    paddingHorizontal: 24,
-    paddingTop: 16,
-    paddingBottom: 40,
+    paddingHorizontal: 22,
+    paddingTop: 14,
+    paddingBottom: Platform.OS === 'ios' ? 36 : 24,
     borderTopWidth: 1,
-    borderColor: '#334155',
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderColor: '#1e2638',
   },
   handle: {
-    width: 44,
-    height: 5,
-    backgroundColor: '#334155',
-    borderRadius: 3,
+    width: 36,
+    height: 4,
+    backgroundColor: '#1e2638',
+    borderRadius: 2,
     alignSelf: 'center',
     marginBottom: 16,
   },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 18,
+  },
   title: {
-    color: '#f8fafc',
-    fontSize: 20,
+    color: '#ffffff',
+    fontSize: 18,
     fontWeight: '800',
-    marginBottom: 6,
+    letterSpacing: -0.2,
   },
   subtitle: {
-    color: '#94a3b8',
-    fontSize: 13,
-    marginBottom: 18,
-    lineHeight: 18,
+    color: '#64748b',
+    fontSize: 12,
+    marginTop: 3,
+  },
+  closeButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#151b28',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#1e2638',
+  },
+  errorBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(239, 68, 68, 0.25)',
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+    borderRadius: 10,
+    marginBottom: 14,
   },
   errorText: {
-    backgroundColor: 'rgba(239, 68, 68, 0.15)',
     color: '#ef4444',
-    padding: 10,
-    borderRadius: 8,
-    fontSize: 13,
-    marginBottom: 12,
+    fontSize: 12,
     fontWeight: '600',
+    flex: 1,
+  },
+  scrollForm: {
+    paddingBottom: 16,
   },
   inputLabel: {
-    color: '#cbd5e1',
-    fontSize: 13,
-    fontWeight: '600',
+    color: '#64748b',
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.8,
     marginBottom: 6,
   },
-  input: {
-    backgroundColor: '#1e293b',
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#131825',
     borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    color: '#f8fafc',
-    fontSize: 15,
-    marginBottom: 14,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: '#1e2638',
+    paddingHorizontal: 12,
+    marginBottom: 16,
+  },
+  inputWrapperFocused: {
+    borderColor: '#10b981',
+    backgroundColor: '#151b28',
+  },
+  inputIcon: {
+    marginRight: 8,
+  },
+  currencyPrefix: {
+    color: '#64748b',
+    fontSize: 16,
+    fontWeight: '700',
+    marginRight: 8,
+  },
+  currencyPrefixFocused: {
+    color: '#10b981',
+  },
+  input: {
+    flex: 1,
+    paddingVertical: 12,
+    color: '#ffffff',
+    fontSize: 15,
+    fontWeight: '500',
   },
   durationsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
-    marginBottom: 24,
+    marginBottom: 22,
   },
   durationChip: {
-    backgroundColor: '#1e293b',
+    backgroundColor: '#131825',
     paddingVertical: 10,
     paddingHorizontal: 14,
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: '#1e2638',
   },
   durationChipSelected: {
-    backgroundColor: '#10b981',
+    backgroundColor: 'rgba(16, 185, 129, 0.12)',
     borderColor: '#10b981',
   },
   durationChipText: {
-    color: '#94a3b8',
-    fontSize: 13,
+    color: '#64748b',
+    fontSize: 12,
     fontWeight: '600',
   },
   durationChipTextSelected: {
-    color: '#ffffff',
-    fontWeight: '800',
+    color: '#10b981',
+    fontWeight: '700',
   },
   submitBtn: {
     backgroundColor: '#10b981',
-    paddingVertical: 16,
-    borderRadius: 14,
+    paddingVertical: 14,
+    borderRadius: 12,
     alignItems: 'center',
-    marginBottom: 10,
+    justifyContent: 'center',
+    shadowColor: '#10b981',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  submitContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   submitBtnText: {
     color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '800',
-  },
-  cancelLink: {
-    alignItems: 'center',
-    paddingVertical: 8,
-  },
-  cancelLinkText: {
-    color: '#94a3b8',
     fontSize: 14,
+    fontWeight: '700',
+    letterSpacing: 0.2,
   },
 });

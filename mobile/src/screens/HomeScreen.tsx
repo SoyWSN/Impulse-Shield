@@ -6,10 +6,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
-  StatusBar,
   RefreshControl,
   Alert,
 } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { Feather } from '@expo/vector-icons';
 import { SavingsHeader } from '../components/SavingsHeader';
 import { ActiveCountdownCard } from '../components/ActiveCountdownCard';
 import { CreateImpulseModal } from '../components/CreateImpulseModal';
@@ -77,10 +78,23 @@ export const HomeScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#020617" />
+      <StatusBar style="light" />
+
+      {/* Top App Header */}
+      <View style={styles.topBar}>
+        <View style={styles.topBarLeft}>
+          <Text style={styles.appTitle}>ImpulseShield</Text>
+        </View>
+        <View style={styles.watchSyncBadge}>
+          <Feather name="watch" size={13} color="#10b981" style={{ marginRight: 5 }} />
+          <Text style={styles.watchSyncText}>Wear OS</Text>
+        </View>
+      </View>
+
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -101,7 +115,7 @@ export const HomeScreen: React.FC = () => {
         <HistoryList items={allImpulses} />
       </ScrollView>
 
-      {/* Botón flotante para frenar nuevo impulso */}
+      {/* Floating Action Button */}
       <View style={styles.fabContainer}>
         <TouchableOpacity
           style={[styles.fab, activeImpulse !== null && styles.fabDisabled]}
@@ -115,10 +129,15 @@ export const HomeScreen: React.FC = () => {
               setIsModalOpen(true);
             }
           }}
-          activeOpacity={activeImpulse ? 1 : 0.8}
+          activeOpacity={activeImpulse ? 1 : 0.85}
         >
-          <Text style={styles.fabIcon}>🛡️</Text>
-          <Text style={styles.fabText}>
+          <Feather
+            name={activeImpulse ? 'lock' : 'plus'}
+            size={18}
+            color={activeImpulse ? '#94a3b8' : '#ffffff'}
+            style={styles.fabIcon}
+          />
+          <Text style={[styles.fabText, activeImpulse !== null && styles.fabTextDisabled]}>
             {activeImpulse ? 'Enfriamiento en curso' : 'Frenar Impulso'}
           </Text>
         </TouchableOpacity>
@@ -136,14 +155,49 @@ export const HomeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#020617',
+    backgroundColor: '#06080e',
+  },
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: '#06080e',
+  },
+  topBarLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  appTitle: {
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: '800',
+    letterSpacing: -0.3,
+  },
+  watchSyncBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(16, 185, 129, 0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(16, 185, 129, 0.2)',
+    paddingHorizontal: 9,
+    paddingVertical: 4,
+    borderRadius: 14,
+  },
+  watchSyncText: {
+    color: '#10b981',
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.5,
   },
   container: {
     flex: 1,
-    backgroundColor: '#020617',
+    backgroundColor: '#06080e',
   },
   scrollContent: {
-    paddingBottom: 100,
+    paddingBottom: 110,
   },
   fabContainer: {
     position: 'absolute',
@@ -156,26 +210,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 16,
-    borderRadius: 18,
+    paddingVertical: 15,
+    borderRadius: 14,
     shadowColor: '#10b981',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.25,
     shadowRadius: 10,
-    elevation: 6,
+    elevation: 4,
   },
   fabDisabled: {
-    backgroundColor: '#334155',
+    backgroundColor: '#151b28',
+    borderWidth: 1,
+    borderColor: '#1e2638',
     shadowOpacity: 0,
     elevation: 0,
   },
   fabIcon: {
-    fontSize: 20,
     marginRight: 8,
   },
   fabText: {
     color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '800',
+    fontSize: 15,
+    fontWeight: '700',
+    letterSpacing: 0.2,
+  },
+  fabTextDisabled: {
+    color: '#94a3b8',
+    fontWeight: '600',
   },
 });
