@@ -81,7 +81,6 @@ export const ActiveCountdownCard: React.FC<Props> = ({ item, onResolve }) => {
           <Text style={styles.productName} numberOfLines={1}>
             {item.productName}
           </Text>
-          <Text style={styles.priceSubtext}>Precio evaluado</Text>
         </View>
         <Text style={styles.priceTag}>
           {formatCurrency(item.price, item.currency)}

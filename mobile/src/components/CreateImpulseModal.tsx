@@ -11,7 +11,6 @@ import {
   Platform,
   ScrollView,
   TouchableWithoutFeedback,
-  Keyboard,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
@@ -91,12 +90,7 @@ export const CreateImpulseModal: React.FC<Props> = ({ visible, onClose, onSubmit
 
             {/* Header */}
             <View style={styles.headerRow}>
-              <View>
-                <Text style={styles.title}>Frenar impulso</Text>
-                <Text style={styles.subtitle}>
-                  Activa un tiempo de enfriamiento antes de comprar.
-                </Text>
-              </View>
+              <Text style={styles.title}>Frenar impulso</Text>
               <TouchableOpacity
                 onPress={handleClose}
                 style={styles.closeButton}
@@ -119,7 +113,7 @@ export const CreateImpulseModal: React.FC<Props> = ({ visible, onClose, onSubmit
               keyboardShouldPersistTaps="handled"
               contentContainerStyle={styles.scrollForm}
             >
-              <Text style={styles.inputLabel}>ARTÍCULO O PRODUCTO</Text>
+              <Text style={styles.inputLabel}>¿Qué quieres comprar?</Text>
               <View style={[styles.inputWrapper, productFocused && styles.inputWrapperFocused]}>
                 <Feather name="tag" size={16} color={productFocused ? '#10b981' : '#64748b'} style={styles.inputIcon} />
                 <TextInput
@@ -134,7 +128,7 @@ export const CreateImpulseModal: React.FC<Props> = ({ visible, onClose, onSubmit
                 />
               </View>
 
-              <Text style={styles.inputLabel}>PRECIO APROXIMADO (MXN)</Text>
+              <Text style={styles.inputLabel}>¿Cuánto cuesta? MXN</Text>
               <View style={[styles.inputWrapper, priceFocused && styles.inputWrapperFocused]}>
                 <Text style={[styles.currencyPrefix, priceFocused && styles.currencyPrefixFocused]}>$</Text>
                 <TextInput
@@ -149,7 +143,7 @@ export const CreateImpulseModal: React.FC<Props> = ({ visible, onClose, onSubmit
                 />
               </View>
 
-              <Text style={styles.inputLabel}>TIEMPO DE ESPERA (RELOJ)</Text>
+              <Text style={styles.inputLabel}>Tiempo de espera</Text>
               <View style={styles.durationsGrid}>
                 {PRESET_DURATIONS.map((preset) => {
                   const isSelected = selectedDuration === preset.seconds;
@@ -236,7 +230,7 @@ const styles = StyleSheet.create({
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     marginBottom: 18,
   },
   title: {
@@ -244,11 +238,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '800',
     letterSpacing: -0.2,
-  },
-  subtitle: {
-    color: '#64748b',
-    fontSize: 12,
-    marginTop: 3,
   },
   closeButton: {
     width: 32,
@@ -281,11 +270,10 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   inputLabel: {
-    color: '#64748b',
-    fontSize: 10,
-    fontWeight: '700',
-    letterSpacing: 0.8,
-    marginBottom: 6,
+    color: '#94a3b8',
+    fontSize: 12,
+    fontWeight: '600',
+    marginBottom: 8,
   },
   inputWrapper: {
     flexDirection: 'row',

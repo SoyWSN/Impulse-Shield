@@ -11,24 +11,10 @@ interface Props {
 export const SavingsHeader: React.FC<Props> = ({ stats }) => {
   return (
     <View style={styles.container}>
-      {/* Brand row */}
-      <View style={styles.brandRow}>
-        <View style={styles.brandBadge}>
-          <Feather name="shield" size={13} color="#10b981" style={styles.brandIcon} />
-          <Text style={styles.brandText}>IMPULSE SHIELD</Text>
-        </View>
-        <View style={styles.syncPill}>
-          <View style={styles.syncDot} />
-          <Text style={styles.syncText}>EN LÍNEA</Text>
-        </View>
-      </View>
-
       {/* Hero Metric */}
       <View style={styles.heroSection}>
-        <Text style={styles.heroLabel}>AHORRO TOTAL ACUMULADO</Text>
-        <View style={styles.amountRow}>
-          <Text style={styles.heroAmount}>{formatCurrency(stats.totalSaved)}</Text>
-        </View>
+        <Text style={styles.heroLabel}>TOTAL AHORRADO</Text>
+        <Text style={styles.heroAmount}>{formatCurrency(stats.totalSaved)}</Text>
       </View>
 
       {/* Metrics Grid */}
@@ -68,67 +54,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#1b2234',
   },
-  brandRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 18,
-  },
-  brandBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(16, 185, 129, 0.08)',
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.2)',
-  },
-  brandIcon: {
-    marginRight: 6,
-  },
-  brandText: {
-    color: '#10b981',
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 1.2,
-  },
-  syncPill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#151b28',
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#1e2638',
-  },
-  syncDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#10b981',
-    marginRight: 6,
-  },
-  syncText: {
-    color: '#64748b',
-    fontSize: 10,
-    fontWeight: '700',
-    letterSpacing: 0.8,
-  },
   heroSection: {
-    marginBottom: 20,
+    marginBottom: 18,
   },
   heroLabel: {
     color: '#64748b',
     fontSize: 11,
     fontWeight: '700',
     letterSpacing: 1,
-    marginBottom: 6,
-  },
-  amountRow: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
+    marginBottom: 4,
   },
   heroAmount: {
     color: '#ffffff',

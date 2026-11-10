@@ -82,13 +82,7 @@ export const HomeScreen: React.FC = () => {
 
       {/* Top App Header */}
       <View style={styles.topBar}>
-        <View style={styles.topBarLeft}>
-          <Text style={styles.appTitle}>ImpulseShield</Text>
-        </View>
-        <View style={styles.watchSyncBadge}>
-          <Feather name="watch" size={13} color="#10b981" style={{ marginRight: 5 }} />
-          <Text style={styles.watchSyncText}>Wear OS</Text>
-        </View>
+        <Text style={styles.appTitle}>ImpulseShield</Text>
       </View>
 
       <ScrollView
@@ -158,39 +152,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#06080e',
   },
   topBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     paddingHorizontal: 20,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingTop: 12,
+    paddingBottom: 8,
     backgroundColor: '#06080e',
-  },
-  topBarLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   appTitle: {
     color: '#ffffff',
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '800',
     letterSpacing: -0.3,
-  },
-  watchSyncBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(16, 185, 129, 0.08)',
-    borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.2)',
-    paddingHorizontal: 9,
-    paddingVertical: 4,
-    borderRadius: 14,
-  },
-  watchSyncText: {
-    color: '#10b981',
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 0.5,
   },
   container: {
     flex: 1,
