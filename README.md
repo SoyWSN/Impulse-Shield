@@ -44,36 +44,25 @@
 
 ## 🚀 Guía de Ejecución Rápida
 
-### 1. Ejecutar la Aplicación Móvil
+### ⚡ Comando Todo en Uno (Recomendado)
 
-En una terminal en la raíz del proyecto:
+En la carpeta raíz del proyecto, ejecuta un solo comando:
 ```powershell
-cd mobile
-npx expo start
+npm start
 ```
-* **Opción A (Celular Físico):** Escanea el código QR con la app **Expo Go** (SDK 58).
-* **Opción B (Navegador Web):** Presiona la tecla **`w`** para abrir en `http://localhost:8081`.
-* **Opción C (Emulador Android):** Presiona la tecla **`a`** para abrir en tu emulador de teléfono.
+
+Este comando automatiza todo el proceso:
+1. Detecta si tu emulador de reloj `WearOS7` está abierto; si no, lo enciende automáticamente.
+2. Instala la versión más reciente del APK en el reloj.
+3. Abre la aplicación **ImpulseShield** en la pantalla del reloj.
+4. Inicia el servidor de **Expo** en tu terminal mostrando el código QR para escanear en tu celular (o presiona `w` para navegador).
 
 ---
 
-### 2. Ejecutar la Aplicación Smartwatch (Wear OS)
+### Comandos individuales (Opcionales):
 
-Tienes un emulador de reloj configurado llamado **`WearOS7`**.
-
-#### Pasos para abrirlo e instalar la app:
-
-1. **Iniciar el emulador de reloj:**
-   En una terminal (o desde el Device Manager de Android Studio):
-   ```powershell
-   emulator -avd WearOS7
-   ```
-2. **Instalar la APK ya compilada:**
-   Una vez que el reloj encienda en pantalla:
-   ```powershell
-   adb install wear/app/build/outputs/apk/debug/app-debug.apk
-   ```
-3. En el reloj, abre la aplicación **ImpulseShield**. Verás la pantalla en reposo con el escudo verde esperando que actives un impulso desde el teléfono.
+* **Solo la app móvil:** `npm run mobile`
+* **Solo el reloj:** `npm run watch`
 
 ---
 

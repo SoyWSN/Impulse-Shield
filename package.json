@@ -1,0 +1,12 @@
+{
+  "name": "impulse-shield-project",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "ImpulseShield - Solución móvil y smartwatch Wear OS para frenar compras por impulso",
+  "scripts": {
+    "start": "node start.js",
+    "mobile": "cd mobile && npx expo start",
+    "watch": "node start-watch.js"
+  },
+  "private": true
+}
