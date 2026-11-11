@@ -13,6 +13,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { MAX_PRODUCT_NAME_LENGTH, MAX_PRICE } from '../services/impulseService';
 
 interface Props {
   visible: boolean;
@@ -50,21 +51,40 @@ export const CreateImpulseModal: React.FC<Props> = ({ visible, onClose, onSubmit
     onClose();
   };
 
+  const handlePriceChange = (text: string) => {
+    // Permitir solo dígitos y a lo sumo un punto decimal con hasta 2 decimales
+    const cleaned = text.replace(/[^0-9.]/g, '');
+    const parts = cleaned.split('.');
+    if (parts.length > 2) return;
+    if (parts[1] && parts[1].length > 2) return;
+    setPrice(cleaned);
+  };
+
   const handleCreate = async () => {
-    const numPrice = parseFloat(price.replace(/[^0-9.]/g, ''));
-    if (!productName.trim()) {
+    const trimmedName = productName.trim();
+    if (!trimmedName) {
       setErrorMessage('Ingresa el nombre del producto.');
       return;
     }
+    if (trimmedName.length > MAX_PRODUCT_NAME_LENGTH) {
+      setErrorMessage(`El nombre no puede exceder ${MAX_PRODUCT_NAME_LENGTH} caracteres.`);
+      return;
+    }
+
+    const numPrice = parseFloat(price);
     if (isNaN(numPrice) || numPrice <= 0) {
       setErrorMessage('Ingresa un precio válido mayor a 0.');
+      return;
+    }
+    if (numPrice > MAX_PRICE) {
+      setErrorMessage('El precio máximo permitido es de $1,000,000 MXN.');
       return;
     }
 
     try {
       setLoading(true);
       setErrorMessage(null);
-      await onSubmit(productName.trim(), numPrice, selectedDuration);
+      await onSubmit(trimmedName, numPrice, selectedDuration);
       handleClose();
     } catch (err: any) {
       setErrorMessage(err.message || 'Error al registrar el impulso.');
@@ -113,13 +133,25 @@ export const CreateImpulseModal: React.FC<Props> = ({ visible, onClose, onSubmit
               keyboardShouldPersistTaps="handled"
               contentContainerStyle={styles.scrollForm}
             >
-              <Text style={styles.inputLabel}>¿Qué quieres comprar?</Text>
+              {/* Product input with character counter */}
+              <View style={styles.labelRow}>
+                <Text style={styles.inputLabel}>¿Qué quieres comprar?</Text>
+                <Text
+                  style={[
+                    styles.charCount,
+                    productName.length >= MAX_PRODUCT_NAME_LENGTH && styles.charCountLimit,
+                  ]}
+                >
+                  {productName.length}/{MAX_PRODUCT_NAME_LENGTH}
+                </Text>
+              </View>
               <View style={[styles.inputWrapper, productFocused && styles.inputWrapperFocused]}>
                 <Feather name="tag" size={16} color={productFocused ? '#10b981' : '#64748b'} style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Ej. Audífonos Bluetooth, Tenis..."
                   placeholderTextColor="#475569"
+                  maxLength={MAX_PRODUCT_NAME_LENGTH}
                   value={productName}
                   onChangeText={setProductName}
                   onFocus={() => setProductFocused(true)}
@@ -128,7 +160,11 @@ export const CreateImpulseModal: React.FC<Props> = ({ visible, onClose, onSubmit
                 />
               </View>
 
-              <Text style={styles.inputLabel}>¿Cuánto cuesta? MXN</Text>
+              {/* Price input with max limit hint */}
+              <View style={styles.labelRow}>
+                <Text style={styles.inputLabel}>¿Cuánto cuesta? MXN</Text>
+                <Text style={styles.charCount}>Máx. $1,000,000</Text>
+              </View>
               <View style={[styles.inputWrapper, priceFocused && styles.inputWrapperFocused]}>
                 <Text style={[styles.currencyPrefix, priceFocused && styles.currencyPrefixFocused]}>$</Text>
                 <TextInput
@@ -136,8 +172,9 @@ export const CreateImpulseModal: React.FC<Props> = ({ visible, onClose, onSubmit
                   placeholder="0.00"
                   placeholderTextColor="#475569"
                   keyboardType="numeric"
+                  maxLength={10}
                   value={price}
-                  onChangeText={setPrice}
+                  onChangeText={handlePriceChange}
                   onFocus={() => setPriceFocused(true)}
                   onBlur={() => setPriceFocused(false)}
                 />
@@ -269,11 +306,25 @@ const styles = StyleSheet.create({
   scrollForm: {
     paddingBottom: 16,
   },
+  labelRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+    marginBottom: 8,
+  },
   inputLabel: {
     color: '#94a3b8',
     fontSize: 12,
     fontWeight: '600',
-    marginBottom: 8,
+  },
+  charCount: {
+    color: '#64748b',
+    fontSize: 11,
+    fontWeight: '600',
+    fontVariant: ['tabular-nums'],
+  },
+  charCountLimit: {
+    color: '#f59e0b',
   },
   inputWrapper: {
     flexDirection: 'row',

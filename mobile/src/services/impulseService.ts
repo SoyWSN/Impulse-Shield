@@ -18,16 +18,32 @@ export interface ValidationResult {
   error?: string;
 }
 
+export const MAX_PRODUCT_NAME_LENGTH = 40;
+export const MAX_PRICE = 1_000_000;
+
 export function validateImpulseInput(
   productName: string,
   price: number,
   durationSeconds: number
 ): ValidationResult {
-  if (!productName || productName.trim().length === 0) {
+  const trimmedName = productName ? productName.trim() : '';
+  if (!trimmedName || trimmedName.length === 0) {
     return { valid: false, error: 'El nombre del producto no puede estar vacío.' };
+  }
+  if (trimmedName.length > MAX_PRODUCT_NAME_LENGTH) {
+    return {
+      valid: false,
+      error: `El nombre del producto no puede exceder los ${MAX_PRODUCT_NAME_LENGTH} caracteres.`,
+    };
   }
   if (typeof price !== 'number' || isNaN(price) || price <= 0) {
     return { valid: false, error: 'El precio debe ser un número mayor a 0.' };
+  }
+  if (price > MAX_PRICE) {
+    return {
+      valid: false,
+      error: 'El precio máximo permitido es de $1,000,000 MXN.',
+    };
   }
   if (typeof durationSeconds !== 'number' || isNaN(durationSeconds) || durationSeconds <= 0) {
     return { valid: false, error: 'El tiempo de enfriamiento debe ser mayor a 0 segundos.' };
